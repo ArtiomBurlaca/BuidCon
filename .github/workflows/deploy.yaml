@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -29,6 +28,11 @@ jobs:
             docker stop buidcon-container || true
             docker rm buidcon-container || true
             docker run -d -p 80:80 --name buidcon-container buidcon
+      
+      
 
       - name: Check Docker version (debug)
         run: docker --version
+
+      - name: List directory
+        run: ls -la /root/BuiltCon/BuidCon

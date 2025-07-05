@@ -1,0 +1,33 @@
+name: Deploy Static site to VPS via SSH
+
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /root/BuiltCon/BuidCon
+            git pull origin main
+            docker build -t buidcon .
+            docker stop buidcon-container || true
+            docker rm buidcon-container || true
+            docker run -d -p 80:80 --name buidcon-container buidcon
+
+      - name: Check Docker version (debug)
+        run: docker --version
+
+      - name: List directory
+        run: ls -la /root/BuiltCon/BuidCon

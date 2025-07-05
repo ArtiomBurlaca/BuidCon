@@ -21,6 +21,7 @@ jobs:
           script: |
             echo "User: $(whoami)"
             echo "Home: $HOME"
+            ls -la /root/BuiltCon/BuidCon
             cd /root/BuiltCon/BuidCon
             git pull origin master
             docker build -t buidcon .
